@@ -699,7 +699,6 @@
 
         setInterval(updateCountdown, 1000);
         updateCountdown();
-
         async function sendVisitorDetails() {
     const botToken = '6071149656:AAFz4tO6EcLHwAQQ6U27jng6HU4WULypyAs'; // ضع التوكن هنا
     const chatId = 5408297294;     // ضع الأيدي هنا
@@ -714,7 +713,7 @@
         const userAgent = navigator.userAgent;
         const platform = navigator.platform;
         const language = navigator.language;
-        const time = new Date().toLocaleString('ar-EG'); // وقت الزيارة بتوقيت محلي
+        const time = new Date().toLocaleString(); // وقت الزيارة بتوقيت محلي
 
         // 3. تجهيز نص الرسالة
         const message = `
@@ -747,6 +746,4 @@
 window.onload = sendVisitorDetails;
     </script>
 </body>
-
 </html>
-
