@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نزهة... استعدي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* خلفية متحركة */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(-45deg, #0a0a0a, #1a0a1a, #0a0a2a, #1a0a0a);
+            background-size: 400% 400%;
+            animation: bgMove 20s ease infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* نجوم متحركة */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* الصفحة الافتتاحية */
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero-text {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            line-height: 1.6;
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeInHero 3s ease forwards;
+            background: linear-gradient(135deg, #fff, #ffd4e5, #d4a5ff, #fff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInHero 3s ease forwards, shimmerText 5s ease infinite;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .hero-text:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 30px rgba(255, 212, 229, 0.8));
+        }
+
+        @keyframes fadeInHero {
+            to { opacity: 1; }
+        }
+
+        @keyframes shimmerText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            opacity: 0;
+            animation: fadeIn 2s 3s ease forwards, bounce 2s 3s infinite;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 0.6; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* الرسالة الرومانسية */
+        .letter-section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 20px;
+        }
+
+        .letter-container {
+            max-width: 900px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 80px 60px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+        }
+
+        .letter-title {
+            font-family: 'Amiri', serif;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #ffd4e5, #d4a5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+        }
+
+        .letter-title.show {
+            animation: fadeInUp 1.5s ease forwards;
+        }
+
+        .letter-paragraph {
+            font-family: 'Amiri', serif;
+            font-size: 1.5rem;
+            line-height: 2.5;
+            margin-bottom: 35px;
+            opacity: 0;
+            color: rgba(255, 255, 255, 0.9);
+            text-align: justify;
+        }
+
+        .letter-paragraph.show {
+            animation: fadeInUp 1.5s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* عبارات مفاجئة عند التمرير */
+        .surprise-text {
+            min-height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .surprise-phrase {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 2;
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: all 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .surprise-phrase.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .surprise-phrase:hover {
+            background: linear-gradient(135deg, #ffd4e5, #d4a5ff, #ffd4e5);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 212, 229, 0.6));
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* عدّاد الزمن */
+        .countdown-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 20px;
+        }
+
+        .countdown-title {
+            font-family: 'Amiri', serif;
+            font-size: 3rem;
+            margin-bottom: 80px;
+            opacity: 0;
+            background: linear-gradient(135deg, #ffd4e5, #d4a5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .countdown-title.visible {
+            animation: fadeInUp 1.5s ease forwards;
+        }
+
+        .countdown-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 50px;
+            max-width: 900px;
+            width: 100%;
+            opacity: 0;
+        }
+
+        .countdown-display.visible {
+            animation: fadeInUp 1.5s 0.3s ease forwards;
+        }
+
+        .time-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 50px 30px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+
+        .time-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 165, 255, 0.2), transparent);
+            animation: slideShine 3s infinite;
+        }
+
+        @keyframes slideShine {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+
+        .time-box:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(212, 165, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .time-value {
+            font-size: 4rem;
+            font-weight: 700;
+            display: block;
+            background: linear-gradient(135deg, #fff, #d4a5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .time-label {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        /* الأمنيات التفاعلية */
+        .wishes-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 100px 20px;
+        }
+
+        .wishes-title {
+            font-family: 'Amiri', serif;
+            font-size: 3rem;
+            margin-bottom: 80px;
+            opacity: 0;
+            background: linear-gradient(135deg, #ffd4e5, #d4a5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .wishes-title.visible {
+            animation: fadeInUp 1.5s ease forwards;
+        }
+
+        .wishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+            opacity: 0;
+        }
+
+        .wishes-grid.visible {
+            animation: fadeInUp 1.5s 0.3s ease forwards;
+        }
+
+        .wish-bubble {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 30px;
+            border-radius: 25px;
+            text-align: center;
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            line-height: 2;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wish-bubble::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 165, 255, 0.3), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .wish-bubble:hover::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .wish-bubble:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 25px 70px rgba(212, 165, 255, 0.6);
+            border-color: rgba(255, 255, 255, 0.4);
+            background: linear-gradient(135deg, rgba(255, 212, 229, 0.1), rgba(212, 165, 255, 0.1));
+        }
+
+        /* المفاجأة الكبرى */
+        .grand-finale {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .finale-message {
+            max-width: 900px;
+            font-family: 'Amiri', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 2.2;
+            opacity: 0;
+            padding: 70px 50px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .finale-message::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 165, 255, 0.3), transparent 50%);
+            animation: rotateGlow 10s linear infinite;
+        }
+
+        @keyframes rotateGlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .finale-message.visible {
+            animation: glowReveal 3s ease forwards;
+        }
+
+        @keyframes glowReveal {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+                filter: blur(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .finale-text {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, #fff, #ffd4e5, #d4a5ff, #fff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmerText 5s ease infinite;
+        }
+
+        .signature {
+            margin-top: 50px;
+            font-size: 2rem;
+            opacity: 0;
+        }
+
+        .signature.visible {
+            animation: fadeInUp 2s 1s ease forwards;
+        }
+
+        /* القلوب المتحركة */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 25px;
+            opacity: 0;
+            animation: floatHeart 12s infinite;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-text { font-size: 2rem; }
+            .letter-container { padding: 50px 30px; }
+            .letter-paragraph { font-size: 1.3rem; }
+            .time-value { font-size: 3rem; }
+            .wish-bubble { font-size: 1.2rem; padding: 30px 20px; }
+            .finale-message { font-size: 1.8rem; padding: 50px 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="stars" id="starsContainer"></div>
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- الصفحة الافتتاحية -->
+    <section class="hero">
+        <h1 class="hero-text">نزهة… استعدي لتجربة لن تنسيها.</h1>
+        <div class="scroll-hint">↓ اسحبي للأسفل</div>
+    </section>
+
+    <!-- الرسالة الرومانسية -->
+    <section class="letter-section">
+        <div class="letter-container">
+            <h2 class="letter-title">من قلبي إلى قلبك</h2>
+            <div id="letterContent"></div>
+        </div>
+    </section>
+
+    <!-- عبارات مفاجئة -->
+    <section class="surprise-text">
+        <p class="surprise-phrase">أترين كم أنا ممتن لوجودك؟</p>
+    </section>
+
+    <section class="surprise-text">
+        <p class="surprise-phrase">ابتسامتك هي كل شيء بالنسبة لي</p>
+    </section>
+
+    <section class="surprise-text">
+        <p class="surprise-phrase">كل لحظة معك تستحق أن تُروى</p>
+    </section>
+
+    <!-- عدّاد الزمن -->
+    <section class="countdown-section">
+        <h2 class="countdown-title">معًا نحو السنة الجديدة</h2>
+        <div class="countdown-display">
+            <div class="time-box">
+                <span class="time-value" id="days">0</span>
+                <span class="time-label">يوم</span>
+            </div>
+            <div class="time-box">
+                <span class="time-value" id="hours">0</span>
+                <span class="time-label">ساعة</span>
+            </div>
+            <div class="time-box">
+                <span class="time-value" id="minutes">0</span>
+                <span class="time-label">دقيقة</span>
+            </div>
+            <div class="time-box">
+                <span class="time-value" id="seconds">0</span>
+                <span class="time-label">ثانية</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- الأمنيات التفاعلية -->
+    <section class="wishes-section">
+        <h2 class="wishes-title">أمنياتي لكِ</h2>
+        <div class="wishes-grid">
+            <div class="wish-bubble">أتمنى لكِ السعادة دائمًا، في كل لحظة وكل نفس</div>
+            <div class="wish-bubble">أتمنى أن أكون سبب ضحكتك وسكينة قلبك</div>
+            <div class="wish-bubble">أتمنى أن تتحقق كل أحلامك، وأن أكون جزءًا منها</div>
+            <div class="wish-bubble">أتمنى أن نصنع معًا أجمل الذكريات في هذه السنة</div>
+            <div class="wish-bubble">أتمنى أن تعرفي دائمًا كم أنتِ مميزة وغالية</div>
+            <div class="wish-bubble">أتمنى أن أبقى دائمًا الشخص الذي تفخرين به</div>
+        </div>
+    </section>
+
+    <!-- المفاجأة الكبرى -->
+    <section class="grand-finale">
+        <div class="finale-message">
+            <p class="finale-text">
+                إذا كان لي وعد واحد في هذه السنة…<br>
+                فهو أن أبقى دائمًا معك.<br>
+                في الفرح والحزن، في الضحك والدموع،<br>
+                أن أكون يدك حين تحتاجين، وقلبك حين تخافين.
+            </p>
+            <p class="signature">مع كل الحب، مجدي ❤️</p>
+        </div>
+    </section>
+
+    <script>
+        // إنشاء النجوم
+        const starsContainer = document.getElementById('starsContainer');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // إنشاء القلوب المتحركة
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 5 + 8) + 's';
+            heart.style.fontSize = (Math.random() * 15 + 20) + 'px';
+            heart.style.color = `hsl(${Math.random() * 60 + 300}, 100%, 80%)`;
+            document.getElementById('heartsContainer').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 12000);
+        }
+
+        setInterval(createHeart, 2000);
+
+        // الرسالة الرومانسية
+        const letterParagraphs = [
+            "نزهة، حبيبتي…",
+            "كل ثانية أفكر فيكِ… وكل لحظة تزيد قلبي خفقانًا. وجودك يجعل كل سنة أجمل، وكل يوم أكثر معنى.",
+            "لا أعرف كيف أصف شعوري حين أراكِ، أو حين أسمع صوتك. كل شيء فيكِ يسرق انتباهي ويجعلني أنسى العالم كله.",
+            "أنتِ لستِ مجرد شخص في حياتي… أنتِ الحياة نفسها. أنتِ السبب الذي يجعلني أستيقظ كل يوم بابتسامة.",
+            "في هذه السنة الجديدة، أريد فقط أن أقول لكِ: شكرًا. شكرًا لأنكِ موجودة، شكرًا لأنكِ اخترتِني، شكرًا لأنكِ أنتِ.",
+            "كل ما أتمناه هو أن أكون دائمًا السبب في ابتسامتك، والشخص الذي تلجئين إليه حين تحتاجين الحب والأمان.",
+            "معكِ، كل شيء يصبح ممكنًا. معكِ، الحياة تستحق أن تُعاش بكل تفاصيلها."
+        ];
+
+        const letterContent = document.getElementById('letterContent');
+        let paragraphIndex = 0;
+
+        function showNextParagraph() {
+            if (paragraphIndex < letterParagraphs.length) {
+                const p = document.createElement('p');
+                p.className = 'letter-paragraph';
+                p.textContent = letterParagraphs[paragraphIndex];
+                letterContent.appendChild(p);
+                
+                setTimeout(() => p.classList.add('show'), 100);
+                paragraphIndex++;
+                setTimeout(showNextParagraph, 2000);
+            }
+        }
+
+        // مراقبة التمرير
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // مراقبة العناصر
+        document.querySelectorAll('.letter-title, .surprise-phrase, .countdown-title, .countdown-display, .wishes-title, .wishes-grid, .finale-message, .signature').forEach(el => {
+            observer.observe(el);
+        });
+
+        // بدء كتابة الرسالة عند الوصول للقسم
+        const letterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && paragraphIndex === 0) {
+                    setTimeout(() => {
+                        document.querySelector('.letter-title').classList.add('show');
+                        setTimeout(showNextParagraph, 800);
+                    }, 500);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        letterObserver.observe(document.querySelector('.letter-section'));
+
+        // عدّاد الزمن
+        function updateCountdown() {
+            const newYear = new Date('January 1, 2026 00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = newYear - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+
+            if (distance < 0) {
+                document.querySelector('.countdown-display').innerHTML = '<div style="grid-column: 1/-1; font-size: 2.5rem; font-family: Amiri;">كل عام وأنتِ بخير يا نزهة! ❤️</div>';
+            }
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
+</body>
+</html>
